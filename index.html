@@ -36,16 +36,19 @@
     </header>
 
     <div id="mobile-menu"
-        class="hidden lg:hidden fixed inset-0 bg-gray-900 bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8">
-        <button id="close-mobile-menu-btn" class="absolute top-6 right-6 text-white">
-            <i data-lucide="x" class="h-8 w-8"></i>
-        </button>
+        class="hidden lg:hidden fixed inset-0 bg-gray-900 bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-6 p-4">
+
         <a href="#hero" class="mobile-nav-link">Inicio</a>
         <a href="#pilares" class="mobile-nav-link">Nuestros Pilares</a>
         <a href="#herramientas" class="mobile-nav-link">Generadores</a>
         <a href="#acerca-de" class="mobile-nav-link">Sobre el Creador</a>
-        <div id="mobile-auth-buttons-container" class="pt-8 hidden">
+
+        <div id="mobile-auth-buttons-container" class="pt-6">
         </div>
+
+        <button id="close-mobile-menu-btn" class="mt-8 text-gray-400 hover:text-white transition-colors">
+            <i data-lucide="x-circle" class="h-10 w-10"></i>
+        </button>
     </div>
 
     <section id="hero"
