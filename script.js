@@ -179,26 +179,17 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUI(user);
     });
 
-    googleLoginBtn.addEventListener('click', async () => {
+    googleLoginBtn.addEventListener('click', () => {
         loginError.classList.add('hidden');
-        try {
-            await signInWithPopup(auth, new GoogleAuthProvider());
-        } catch (error) {
-            loginError.textContent = 'Error al iniciar con Google. Intenta de nuevo.';
-            loginError.classList.remove('hidden');
-        }
+        // Simplemente cambiamos signInWithPopup por signInWithRedirect
+        signInWithRedirect(auth, new GoogleAuthProvider());
     });
 
-    facebookLoginBtn.addEventListener('click', async () => {
+    facebookLoginBtn.addEventListener('click', () => {
         loginError.classList.add('hidden');
-        try {
-            await signInWithPopup(auth, new FacebookAuthProvider());
-        } catch (error) {
-            loginError.textContent = 'Error al iniciar con Facebook. Intenta de nuevo.';
-            loginError.classList.remove('hidden');
-        }
+        // Hacemos el mismo cambio aquí
+        signInWithRedirect(auth, new FacebookAuthProvider());
     });
-
     // ===== EVENT LISTENERS ADICIONALES =====
     closeLoginModalBtn.addEventListener('click', closeLoginModal);
     closeGeneratorBtn.addEventListener('click', closeGenerator);
