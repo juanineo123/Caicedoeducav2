@@ -5,26 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caicedo Educa - Juan Caicedo</title>
-
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Google Fonts: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Tu Hoja de Estilos Personalizada -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-white text-gray-800">
 
-    <!-- ===== BARRA DE NAVEGACIÓN ===== -->
     <header id="navbar" class="fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#" class="text-3xl font-bold tracking-tight text-white">
@@ -36,8 +27,7 @@
                 <a href="#herramientas" class="nav-link">Generdores</a>
                 <a href="#acerca-de" class="nav-link">Sobre el Creador</a>
             </div>
-            <div id="auth-buttons-container" class="hidden lg:block">
-                <!-- Botones de Login/Logout se insertan aquí con JS -->
+            <div id="auth-buttons-container" class="hidden lg:block hidden">
             </div>
             <button id="mobile-menu-btn" class="lg:hidden text-white">
                 <i data-lucide="menu" class="h-8 w-8"></i>
@@ -45,7 +35,6 @@
         </div>
     </header>
 
-    <!-- Menú Móvil -->
     <div id="mobile-menu"
         class="hidden lg:hidden fixed inset-0 bg-gray-900 bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8">
         <button id="close-mobile-menu-btn" class="absolute top-6 right-6 text-white">
@@ -55,13 +44,10 @@
         <a href="#pilares" class="mobile-nav-link">Nuestros Pilares</a>
         <a href="#herramientas" class="mobile-nav-link">Generadores</a>
         <a href="#acerca-de" class="mobile-nav-link">Sobre el Creador</a>
-        <div id="mobile-auth-buttons-container" class="pt-8">
-            <!-- Botones de Login/Logout para móvil -->
+        <div id="mobile-auth-buttons-container" class="pt-8 hidden">
         </div>
     </div>
 
-
-    <!-- ===== SECCIÓN HÉROE ===== -->
     <section id="hero"
         class="min-h-screen relative flex items-center justify-start p-4 md:px-20 lg:px-32 overflow-hidden">
         <div class="absolute inset-0 bg-gray-900 opacity-60"></div>
@@ -80,66 +66,41 @@
         </div>
     </section>
 
-    <!-- ===== SECCIÓN PILARES ===== -->
     <section id="pilares" class="py-20 px-4">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="section-title">Nuestros Pilares</h2>
-            <p class="section-subtitle">Creemos en una educación que combina eficiencia, pedagogía y tecnología.
-            </p>
+            <p class="section-subtitle">Creemos en una educación que combina eficiencia, pedagogía y tecnología.</p>
             <div class="grid md:grid-cols-3 gap-8 mt-16">
-                <!-- Pilar 1 -->
                 <div class="pillar-card">
-                    <div class="pillar-icon bg-sky-100 text-sky-600">
-                        <i data-lucide="zap"></i>
-                    </div>
+                    <div class="pillar-icon bg-sky-100 text-sky-600"><i data-lucide="zap"></i></div>
                     <h3 class="pillar-title">✔️​Eficiencia Académica</h3>
-                    <p class="pillar-description">Reduce horas de trabajo pedagógico con generadores inteligentes
-                        que se basan 100% en el Currículo Nacional Peruano.</p>
+                    <p class="pillar-description">Reduce horas de trabajo pedagógico con generadores inteligentes que se
+                        basan 100% en el Currículo Nacional Peruano.</p>
                 </div>
-                <!-- Pilar 2 -->
                 <div class="pillar-card">
-                    <div class="pillar-icon bg-emerald-100 text-emerald-600">
-                        <i data-lucide="lightbulb"></i>
-                    </div>
+                    <div class="pillar-icon bg-emerald-100 text-emerald-600"><i data-lucide="lightbulb"></i></div>
                     <h3 class="pillar-title">💯Innovación Pedagógica</h3>
                     <p class="pillar-description">Accede a la Suite de Generadores en constante evolución, diseñadas
-                        para fomentar
-                        la creatividad y el pensamiento crítico.</p>
+                        para fomentar la creatividad y el pensamiento crítico.</p>
                 </div>
-                <!-- Pilar 3 -->
                 <div class="pillar-card">
-                    <div class="pillar-icon bg-amber-100 text-amber-600">
-                        <i data-lucide="users"></i>
-                    </div>
+                    <div class="pillar-icon bg-amber-100 text-amber-600"><i data-lucide="users"></i></div>
                     <h3 class="pillar-title">🌐Soporte Continuo🌐</h3>
                     <p class="pillar-description">Una plataforma creada y actualizada mes a mes por un docente como tú,
-                        comprometido
-                        con el éxito de nuestra educación.</p>
+                        comprometido con el éxito de nuestra educación.</p>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- ===== SECCIÓN HERRAMIENTAS ===== -->
     <section id="herramientas" class="py-20 px-4 bg-gray-50">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="section-title">Suite de Generadores del Docente</h2>
             <p id="tools-subtitle" class="section-subtitle">Inicia sesión para acceder a un ecosistema de soluciones a
                 tu medida.</p>
-
-            <!-- Filtros de Categorías -->
-            <div id="category-filters" class="mt-8 flex justify-center flex-wrap gap-2">
-                <!-- Los botones de filtro se insertarán aquí -->
-            </div>
-
-            <!-- Contenedor de la cuadrícula de generadores -->
-            <div id="generator-grid-container" class="mt-12">
-                <!-- La cuadrícula se generará aquí con JS -->
-            </div>
+            <div id="category-filters" class="mt-8 flex justify-center flex-wrap gap-2"></div>
+            <div id="generator-grid-container" class="mt-12"></div>
         </div>
     </section>
-
-    <!-- ===== SECCIÓN ACERCA DE ===== -->
     <section id="acerca-de" class="py-20 px-4">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div class="about-image-container">
@@ -149,34 +110,28 @@
             <div class="text-center md:text-left">
                 <p class="font-semibold text-cyan-600">✔️UN MAESTRO PARA MAESTROS</p>
                 <h2 class="section-title mt-2">Hola, soy el prof.<br>"CAICEDO"</h2>
-                <p class="mt-4 text-lg text-gray-600 text-justify">
-                    ✏️Como colega y maestro de matemática, conozco de primera mano las noches dedicadas a la
-                    planificación
-                    y el papeleo. He creado "Caicedo Educa" con un solo propósito: devolvernos el tiempo y la energía
-                    para que podamos enfocarnos en la esencia de nuestra profesión. Esta no es solo una suite de
-                    Generadores; es mi compromiso con la revalorización de la labor docente en el Perú.
-                </p>
+                <p class="mt-4 text-lg text-gray-600 text-justify">✏️Como colega y maestro de matemática, conozco de
+                    primera mano las noches dedicadas a la planificación y el papeleo. He creado "Caicedo Educa" con un
+                    solo propósito: devolvernos el tiempo y la energía para que podamos enfocarnos en la esencia de
+                    nuestra profesión. Esta no es solo una suite de Generadores; es mi compromiso con la revalorización
+                    de la labor docente en el Perú.</p>
                 <div class="mt-8 text-center">
                     <a href="https://wa.me/51987654321?text=Hola%2C%20estoy%20interesado%20en%20un%20proyecto%20web."
                         target="_blank"
                         class="inline-flex items-center justify-center px-6 py-3 font-semibold text-white bg-emerald-500 rounded-full shadow-lg hover:bg-emerald-600 transition-transform duration-300 ease-in-out hover:scale-105">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        <svg xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="mr-2 h-5 w-5">
                             <path
                                 d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
                             </path>
                         </svg>
-
                         Contáctame para tu proyecto
                     </a>
                 </div>
             </div>
         </div>
     </section>
-
-    <!-- ===== FOOTER ===== -->
     <footer class="bg-gray-900 text-white py-12 px-4">
         <div class="max-w-7xl mx-auto text-center">
             <p class="font-bold text-2xl">Caicedo<span class="text-cyan-400">Educa</span></p>
@@ -184,9 +139,6 @@
             <p class="mt-2 text-gray-500 text-xs">Todos los derechos reservados y patentados.</p>
         </div>
     </footer>
-
-    <!-- ===== MODALES (Login y Generador) ===== -->
-    <!-- El HTML de los modales es el mismo que en la versión anterior, se controla con JS/CSS -->
     <div id="login-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <button id="close-login-modal-btn" class="modal-close-button"><i data-lucide="x"></i></button>
@@ -197,8 +149,8 @@
                     gratis, rápido y seguro.</p>
                 <div class="space-y-4 mt-8">
                     <button id="google-login-btn"
-                        class="social-login-button bg-white border-gray-300 hover:bg-gray-50 text-gray-700">
-                        <svg class="w-5 h-5 mr-3" viewBox="0 0 48 48">
+                        class="social-login-button bg-white border-gray-300 hover:bg-gray-50 text-gray-700"><svg
+                            class="w-5 h-5 mr-3" viewBox="0 0 48 48">
                             <path fill="#FFC107"
                                 d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z">
                             </path>
@@ -211,41 +163,34 @@
                             <path fill="#1976D2"
                                 d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C42.022,35.132,44,30.028,44,24C44,22.659,43.862,21.35,43.611,20.083z">
                             </path>
-                        </svg>
-                        Continuar con Google
-                    </button>
+                        </svg>Continuar con Google</button>
                     <button id="facebook-login-btn"
-                        class="social-login-button bg-[#1877F2] hover:bg-[#166fe5] text-white">
-                        <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                        class="social-login-button bg-[#1877F2] hover:bg-[#166fe5] text-white"><svg class="w-6 h-6 mr-3"
+                            fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5c-.83 0-1 .42-1 1v2h2.5l-.5 3H14v6.8c4.56-.93 8-4.96 8-9.8z">
                             </path>
-                        </svg>
-                        Continuar con Facebook
-                    </button>
+                        </svg>Continuar con Facebook</button>
                 </div>
                 <p id="login-error" class="text-red-500 text-center hidden mt-4 text-sm"></p>
             </div>
         </div>
     </div>
-
     <div id="generator-modal"
         class="hidden fixed inset-0 bg-gray-900 bg-opacity-90 z-[60] flex flex-col p-2 sm:p-4 md:p-6">
         <div class="w-full flex justify-end flex-shrink-0 mb-2">
             <button id="close-generator-btn"
-                class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white">
-                <i data-lucide="x" class="h-6 w-6"></i>
-            </button>
+                class="bg-red-600 hover:bg-red-700 text-white rounded-full p-2 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white"><i
+                    data-lucide="x" class="h-6 w-6"></i></button>
         </div>
         <div class="flex-grow bg-white rounded-lg overflow-hidden">
             <iframe id="generator-iframe" class="w-full h-full border-0" title="Generador"></iframe>
         </div>
     </div>
 
-    <!-- Script Personalizado -->
     <script src="script.js"></script>
 
-    <!-- Script de Firebase (Módulo) -->
+    // REEMPLAZA TU SCRIPT ACTUAL POR ESTE
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
         import {
@@ -254,12 +199,14 @@
             signOut,
             GoogleAuthProvider,
             FacebookAuthProvider,
+            signInWithPopup,    // <--- AÑADIDO AQUÍ
             signInWithRedirect,
             getRedirectResult
         } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
+
         const firebaseConfig = {
             apiKey: "AIzaSyC-Og-9Ju4aWSbmwa6b4OpoHzjPzd073VI",
-            authDomain: "auth.caicedoeduca.com",
+            authDomain: "delta-cortex-437020-h5.firebaseapp.com",
             projectId: "delta-cortex-437020-h5",
             storageBucket: "delta-cortex-437020-h5.appspot.com",
             messagingSenderId: "423600255022",
@@ -275,11 +222,14 @@
             signOut,
             GoogleAuthProvider,
             FacebookAuthProvider,
-            signInWithPopup
+            signInWithPopup,    // <--- Y AÑADIDO AQUÍ
+            signInWithRedirect,
             getRedirectResult
         };
     </script>
-
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

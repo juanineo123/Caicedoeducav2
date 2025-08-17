@@ -40,48 +40,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ===== FUNCIONES =====
-
-    /**
-     * Actualiza la UI basada en el estado de autenticación del usuario.
-     * @param {object|null} user - El objeto de usuario de Firebase o null.
-     */
     function updateUI(user) {
-        // Limpiar contenedores de botones
         authButtonsContainer.innerHTML = '';
         mobileAuthButtonsContainer.innerHTML = '';
-
         if (user) {
-            // --- VISTA DE USUARIO AUTENTICADO ---
             toolsSubtitle.textContent = `Bienvenido/a, ${user.displayName || 'docente'}. Selecciona una herramienta para empezar.`;
-
-            // CÓDIGO NUEVO
             const logoutButtonHTML = `<button class="auth-button border-red-500 text-red-500 hover:bg-red-500 hover:text-white js-logout-button">Cerrar Sesión</button>`;
             authButtonsContainer.innerHTML = logoutButtonHTML;
             mobileAuthButtonsContainer.innerHTML = logoutButtonHTML;
-
-            // AÑADE ESTE NUEVO BLOQUE
             document.querySelectorAll('.js-logout-button').forEach(button => {
                 button.addEventListener('click', () => window.firebaseAuth.signOut(window.firebaseAuth.auth));
             });
-
             renderFilters();
             renderGenerators('Todos');
             closeLoginModal();
-
         } else {
-            // --- VISTA DE USUARIO NO AUTENTICADO ---
             toolsSubtitle.textContent = 'Inicia sesión para acceder a un ecosistema de soluciones a tu medida.';
-
-            // CÓDIGO NUEVO
             const loginButtonHTML = `<button class="auth-button js-login-button">Iniciar Sesión</button>`;
             authButtonsContainer.innerHTML = loginButtonHTML;
             mobileAuthButtonsContainer.innerHTML = loginButtonHTML;
-
-            // AÑADE ESTE NUEVO BLOQUE
             document.querySelectorAll('.js-login-button').forEach(button => {
                 button.addEventListener('click', openLoginModal);
             });
-
             renderLockedGenerators();
         }
     }
@@ -108,9 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         generatorGridContainer.innerHTML = '';
         const grid = document.createElement('div');
         grid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-6';
-
         const filteredGenerators = filter === 'Todos' ? generators : generators.filter(g => g.category === filter);
-
         filteredGenerators.forEach(gen => {
             const color = categoryColors[gen.category] || 'gray';
             const card = document.createElement('div');
@@ -126,8 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="generator-card-footer">
-                    
-<span>Abrir Herramienta &rarr;</span>
+                    <span>Abrir Herramienta &rarr;</span>
                 </div>
             `;
             card.addEventListener('click', () => openGenerator(gen.url));
@@ -138,18 +115,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderLockedGenerators() {
-        categoryFiltersContainer.innerHTML = '';
-        generatorGridContainer.innerHTML = `
+        if (categoryFiltersContainer) {
+            categoryFiltersContainer.innerHTML = '';
+        }
+        if (generatorGridContainer) {
+            generatorGridContainer.innerHTML = `
             <div class="mt-12 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center col-span-1 md:col-span-2 lg:col-span-3">
                 <i data-lucide="lock" class="mx-auto text-gray-400 h-12 w-12"></i>
                 <p class="mt-4 text-gray-600 font-semibold">El contenido está bloqueado.</p>
                 <p class="text-gray-500">Por favor, inicia sesión para ver las herramientas.</p>
             </div>
         `;
-        lucide.createIcons();
+            lucide.createIcons();
+        }
     }
 
-    // --- Funciones de Modales ---
     function openLoginModal() {
         loginModal.classList.remove('hidden');
         setTimeout(() => loginModal.classList.add('visible'), 10);
@@ -173,51 +153,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ===== LÓGICA DE FIREBASE =====
-    const { auth, onAuthStateChanged, signOut, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } = window.firebaseAuth;
-
+    const { auth, onAuthStateChanged, signOut, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = window.firebaseAuth;
     onAuthStateChanged(auth, user => {
         updateUI(user);
+        if (authButtonsContainer && mobileAuthButtonsContainer) {
+            authButtonsContainer.classList.remove('hidden');
+            mobileAuthButtonsContainer.classList.remove('hidden');
+        }
     });
-        
-    const { getRedirectResult } = window.firebaseAuth;
 
-    
     getRedirectResult(auth)
         .then((result) => {
             if (result) {
-                
                 console.log('Inicio de sesión por redirección exitoso:', result.user);
             }
         }).catch((error) => {
-            // Manejar cualquier error que ocurra durante la redirección.
             console.error('Error en el resultado de la redirección:', error);
             loginError.textContent = 'Hubo un error al completar el inicio de sesión.';
             loginError.classList.remove('hidden');
         });
 
-    googleLoginBtn.addEventListener('click', () => {
+    // CÓDIGO CORREGIDO Y DEFINITIVO
+    googleLoginBtn.addEventListener('click', async () => {
         loginError.classList.add('hidden');
-        // Simplemente cambiamos signInWithPopup por signInWithRedirect
-        signInWithRedirect(auth, new GoogleAuthProvider());
+        try {
+            await signInWithPopup(auth, new GoogleAuthProvider());
+        } catch (error) {
+            console.error("Error con Google Pop-up:", error);
+            loginError.textContent = 'Error al iniciar con Google. Intenta de nuevo.';
+            loginError.classList.remove('hidden');
+        }
     });
 
-    facebookLoginBtn.addEventListener('click', () => {
+    // CÓDIGO CORREGIDO Y DEFINITIVO
+    facebookLoginBtn.addEventListener('click', async () => {
         loginError.classList.add('hidden');
-        // Hacemos el mismo cambio aquí
-        signInWithRedirect(auth, new FacebookAuthProvider());
+        try {
+            await signInWithPopup(auth, new FacebookAuthProvider());
+        } catch (error) {
+            console.error("Error con Facebook Pop-up:", error);
+            loginError.textContent = 'Error al iniciar con Facebook. Intenta de nuevo.';
+            loginError.classList.remove('hidden');
+        }
     });
+
     // ===== EVENT LISTENERS ADICIONALES =====
     closeLoginModalBtn.addEventListener('click', closeLoginModal);
     closeGeneratorBtn.addEventListener('click', closeGenerator);
 
-    // Menú móvil
     mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
     closeMobileMenuBtn.addEventListener('click', () => mobileMenu.classList.add('hidden'));
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
         link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
     });
 
-    // Efecto de scroll en la navbar
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
