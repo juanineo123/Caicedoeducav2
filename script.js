@@ -178,6 +178,22 @@ document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, user => {
         updateUI(user);
     });
+        
+    const { getRedirectResult } = window.firebaseAuth;
+
+    
+    getRedirectResult(auth)
+        .then((result) => {
+            if (result) {
+                
+                console.log('Inicio de sesión por redirección exitoso:', result.user);
+            }
+        }).catch((error) => {
+            // Manejar cualquier error que ocurra durante la redirección.
+            console.error('Error en el resultado de la redirección:', error);
+            loginError.textContent = 'Hubo un error al completar el inicio de sesión.';
+            loginError.classList.remove('hidden');
+        });
 
     googleLoginBtn.addEventListener('click', () => {
         loginError.classList.add('hidden');
