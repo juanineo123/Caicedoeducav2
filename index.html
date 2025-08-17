@@ -113,8 +113,10 @@
             <div class="text-center md:text-left">
                 <p class="font-semibold text-cyan-600">✔️UN MAESTRO PARA MAESTROS</p>
                 <h2 class="section-title mt-2">Hola, soy el prof.<br>"CAICEDO"</h2>
-                <p class="mt-4 text-lg text-gray-600 text-justify">✏️Soy maestro de matemática con una pasión por la tecnología. Actualmente, 
-                    me dedico a programar, crear aplicaciones y sitios web profesionales, combinando mis dos grandes vocaciones: el código y la enseñanza.</p>
+                <p class="mt-4 text-lg text-gray-600 text-justify">✏️Soy maestro de matemática con una pasión por la
+                    tecnología. Actualmente,
+                    me dedico a programar, crear aplicaciones y sitios web profesionales, combinando mis dos grandes
+                    vocaciones: el código y la enseñanza.</p>
                 <div class="mt-8 text-center">
                     <a href="https://wa.me/51948246637?text=Hola%2C%20estoy%20interesado%20en%20un%20proyecto%20web."
                         target="_blank"
@@ -190,7 +192,7 @@
 
     <script src="script.js"></script>
 
-    
+
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
         import {
@@ -230,6 +232,11 @@
     <script>
         lucide.createIcons();
     </script>
+    <div id="logout-toast"
+        class="hidden fixed bottom-5 right-5 bg-gray-800 text-white py-3 px-5 rounded-lg shadow-lg flex items-center z-[70]">
+        <i data-lucide="loader-circle" class="animate-spin mr-3"></i>
+        <span>Cerrando sesión...</span>
+    </div>
 </body>
 
 </html>

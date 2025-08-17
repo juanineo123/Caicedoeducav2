@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatorModal = document.getElementById('generator-modal');
     const closeGeneratorBtn = document.getElementById('close-generator-btn');
     const generatorIframe = document.getElementById('generator-iframe');
+    const logoutToast = document.getElementById('logout-toast');
 
     // ===== DATOS DE LOS GENERADORES CON CATEGORÍAS =====
     const generators = [
@@ -49,7 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
             authButtonsContainer.innerHTML = logoutButtonHTML;
             mobileAuthButtonsContainer.innerHTML = logoutButtonHTML;
             document.querySelectorAll('.js-logout-button').forEach(button => {
-                button.addEventListener('click', () => window.firebaseAuth.signOut(window.firebaseAuth.auth));
+                button.addEventListener('click', async () => {
+                    // 1. Muestra el mensaje flotante
+                    if (logoutToast) {
+                        logoutToast.classList.remove('hidden');
+                    }
+
+                    // 2. Espera 1.5 segundos para que el mensaje sea visible
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // 3. Cierra la sesión en Firebase
+                    try {
+                        await window.firebaseAuth.signOut(window.firebaseAuth.auth);
+                        // 4. Redirige a la página de inicio
+                        window.location.href = 'index.html';
+                    } catch (error) {
+                        console.error("Error al cerrar sesión:", error);
+                        // Oculta el mensaje si hay un error
+                        if (logoutToast) {
+                            logoutToast.classList.add('hidden');
+                        }
+                    }
+                });
             });
             renderFilters();
             renderGenerators('Todos');
