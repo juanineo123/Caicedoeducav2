@@ -1,0 +1,396 @@
+/* ===== INICIO: CÓDIGO PARA FONDO EDUCATIVO EN HERO ===== */
+
+/* En lugar de poner la imagen en todo el 'body', 
+  la asignamos directamente a la sección 'hero'.
+*/
+#hero {
+    background-image: url('imagen/fondoprincipal.png');
+    background-size: cover;
+    background-size: cover;
+    background-position: top center;
+    /* Intenta mostrar la parte superior */
+}
+
+
+/* Nos aseguramos de que las otras secciones NO tengan transparencia
+  y respeten los colores de fondo de Tailwind CSS.
+*/
+#pilares,
+#acerca-de,
+#herramientas {
+    background-color: transparent;
+    /* Permite que las clases de Tailwind tomen el control */
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* ===== FIN: CÓDIGO PARA FONDO EDUCATIVO EN HERO ===== */
+
+/* (El resto de tu código CSS va aquí debajo) */
+...
+/* Estilos para la Plataforma "Maestro Innovador" v2 */
+/* (El resto de tu código CSS va aquí debajo) */
+...
+/* Estilos para la Plataforma "Maestro Innovador" v2 */
+
+/* ===== CONFIGURACIÓN GLOBAL ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ===== BARRA DE NAVEGACIÓN ===== */
+#navbar {
+    background-color: transparent;
+    border-bottom: 1px solid transparent;
+}
+
+#navbar.scrolled {
+    background-color: rgba(17, 24, 39, 0.8);
+    /* bg-gray-900 con opacidad */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.nav-link {
+    position: relative;
+    font-weight: 500;
+    color: #d1d5db;
+    /* text-gray-300 */
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #22d3ee;
+    /* text-cyan-400 */
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #22d3ee;
+    transition: width 0.3s ease-out;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.mobile-nav-link {
+    font-size: 1.5rem;
+    /* text-2xl */
+    font-weight: 600;
+    color: #d1d5db;
+    transition: color 0.3s;
+}
+
+.mobile-nav-link:hover {
+    color: #22d3ee;
+}
+
+
+
+
+/* ===== BOTONES ===== */
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.875rem 2rem;
+    /* py-3.5 px-8 */
+    font-weight: 600;
+    color: white;
+    background-color: #0891b2;
+    /* bg-cyan-600 */
+    border-radius: 9999px;
+    /* rounded-full */
+    box-shadow: 0 4px 15px rgba(34, 211, 238, 0.2);
+    transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    background-color: #06b6d4;
+    /* bg-cyan-500 */
+    box-shadow: 0 7px 20px rgba(34, 211, 238, 0.3);
+}
+
+.auth-button {
+    padding: 0.625rem 1.25rem;
+    /* py-2.5 px-5 */
+    font-weight: 500;
+    border-radius: 9999px;
+    transition: all 0.3s ease;
+    border: 1px solid #22d3ee;
+    color: #22d3ee;
+}
+
+.auth-button:hover {
+    background-color: #22d3ee;
+    color: #111827;
+    /* text-gray-900 */
+}
+
+
+/* ===== TÍTULOS DE SECCIÓN ===== */
+.section-title {
+    font-size: 2.5rem;
+    /* text-4xl */
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #1f2937;
+    /* text-gray-800 */
+}
+
+.section-subtitle {
+    margin-top: 1rem;
+    max-width: 42rem;
+    /* max-w-2xl */
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1.125rem;
+    /* text-lg */
+    color: #4b5563;
+    /* text-gray-600 */
+}
+
+/* ===== TARJETAS DE PILARES ===== */
+.pillar-card {
+    background-color: #f9fafb;
+    /* bg-gray-50 */
+    padding: 2.5rem 2rem;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.pillar-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.pillar-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.pillar-icon .lucide {
+    width: 2rem;
+    height: 2rem;
+}
+
+.pillar-title {
+    font-size: 1.25rem;
+    /* text-xl */
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.pillar-description {
+    color: #4b5563;
+    line-height: 1.75;
+}
+
+/* ===== FILTROS Y TARJETAS DE HERRAMIENTAS ===== */
+.filter-button {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    border: 1px solid #d1d5db;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.2s ease;
+}
+
+.filter-button:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+.filter-button.active {
+    background-color: #0891b2;
+    color: white;
+    border-color: #0891b2;
+}
+
+.generator-card {
+    background-color: white;
+    border-radius: 1rem;
+    border: 1px solid #e5e7eb;
+    text-align: left;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.generator-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.07);
+}
+
+.generator-card-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.generator-icon {
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.generator-icon .lucide {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+.generator-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.generator-description {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.generator-card-footer {
+    margin-top: auto;
+    padding: 0.75rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    font-weight: 500;
+    font-size: 0.875rem;
+    color: #0891b2;
+    text-align: right;
+}
+
+/* ===== SECCIÓN ACERCA DE ===== */
+.about-image-container {
+    position: relative;
+}
+
+.about-image-container img {
+    border: 8px solid white;
+}
+
+/* ===== MODALES ===== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(17, 24, 39, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 50;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    padding: 2rem;
+    text-align: center;
+    max-width: 28rem;
+    /* max-w-md */
+    width: 100%;
+    position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: #9ca3af;
+    transition: color 0.2s;
+}
+
+.modal-close-button:hover {
+    color: #374151;
+}
+
+.modal-icon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.modal-icon .lucide {
+    width: 2rem;
+    height: 2rem;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.modal-description {
+    margin-top: 0.5rem;
+    color: #4b5563;
+}
+
+.social-login-button {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 1rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 1s ease-out forwards;
+}
