@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>Abrir Herramienta &rarr;</span>
                 </div>
             `;
-            card.addEventListener('click', () => openGenerator(gen.url));
+            card.addEventListener('click', () => openGenerator(gen.url + '?autorizado=true'));
             grid.appendChild(card);
         });
         generatorGridContainer.appendChild(grid);
