@@ -15,7 +15,7 @@ const firebaseConfig = {
     apiKey: "AIzaSyD_SCyO4s-fZZS2qBTKEqAFiWP3IPD97Uo",
     authDomain: "plataforma-escala.firebaseapp.com",
     projectId: "plataforma-escala",
-    storageBucket: "plataforma-escala.appspot.com", // Es mejor usar .appspot.com
+    storageBucket: "plataforma-escala.firebasestorage.app", // <-- CÁMBIALA A ESTA VERSIÓN
     messagingSenderId: "917193676993",
     appId: "1:917193676993:web:da3a51e59246bd917c1c40"
 };
