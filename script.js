@@ -1,187 +1,75 @@
 // ====================================================================================
-// PASO 1: IMPORTACIONES DE FIREBASE (SINTAXIS MODERNA)
-// Se importan TODAS las funciones necesarias de Firebase v9 desde el inicio.
+// SCRIPT DE DEPURACIÓN TOTAL
 // ====================================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
-// ====================================================================================
-// PASO 2: CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
-// Tus credenciales para conectar este sitio con tu proyecto de Firebase.
-// ====================================================================================
-// Pega este bloque en el script de caicedoeduca.com
+console.log("--- INICIO DE DEPURACIÓN ---");
+console.log("Hora de inicio:", new Date().toISOString());
 
+// --- CONFIGURACIÓN DE FIREBASE ---
 const firebaseConfig = {
     apiKey: "AIzaSyD_SCyO4s-fZZS2qBTKEqAFiWP3IPD97Uo",
     authDomain: "plataforma-escala.firebaseapp.com",
     projectId: "plataforma-escala",
-    storageBucket: "plataforma-escala.firebasestorage.app", // <-- CÁMBIALA A ESTA VERSIÓN
+    storageBucket: "plataforma-escala.firebasestorage.app", // Versión que coincide con el dashboard
     messagingSenderId: "917193676993",
     appId: "1:917193676993:web:da3a51e59246bd917c1c40"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
 // ====================================================================================
-// PASO 3: SCRIPT "GUARDIÁN" DE AUTENTICACIÓN 🔑
-// Se ejecuta de inmediato para proteger la página antes de que se muestre nada.
+// ESTE ES EL LOG MÁS IMPORTANTE: Imprime la configuración que realmente se está usando
 // ====================================================================================
-(function() {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get('token');
+console.log("🔵 PASO 1: CONFIGURACIÓN DE FIREBASE DETECTADA EN ESTA PÁGINA:", firebaseConfig);
 
-    if (token) {
-        // Si hay token en la URL, intenta iniciar sesión con él.
-        signInWithCustomToken(auth, token)
-            .then(() => {
-                console.log("✅ Autenticación con token personalizado exitosa.");
-                // Limpia la URL para que el token no quede visible.
-                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                window.history.replaceState({ path: newUrl }, '', newUrl);
-            })
-            .catch((error) => {
-                // Si el token es inválido, redirige al portal principal.
-                console.error("❌ Error al autenticar con token:", error);
-                window.location.href = 'https://elprofecaicedo.com';
-            });
-    }
-    // Si no hay token, onAuthStateChanged se encargará de redirigir.
-})();
+try {
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    console.log("🟢 PASO 2: Firebase inicializado correctamente.");
 
-// ====================================================================================
-// PASO 4: LÓGICA PRINCIPAL DE LA APLICACIÓN
-// Se ejecuta una vez que el DOM está cargado.
-// ====================================================================================
-document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- REFERENCIAS A ELEMENTOS DEL DOM ---
-    const toolsSubtitle = document.getElementById('tools-subtitle');
-    const authButtonsContainer = document.getElementById('auth-buttons-container');
-    const categoryFiltersContainer = document.getElementById('category-filters');
-    const generatorGridContainer = document.getElementById('generator-grid-container');
-    const generatorModal = document.getElementById('generator-modal');
-    const closeGeneratorBtn = document.getElementById('close-generator-btn');
-    const generatorIframe = document.getElementById('generator-iframe');
-    const logoutToast = document.getElementById('logout-toast');
-    
-    // --- DATOS DE LOS GENERADORES ---
-    const generators = [
-        { title: 'Generador de Sesiones V-2.0', description: 'Crea tu sesión eligiendo una sola Competencia (incluye TUTORÍA).', url: 'https://glistening-starlight-1588bf.netlify.app/', icon: 'book-open-check', category: 'Planificación' },
-        { title: 'Generador de Sesiones V-3.0', description: 'Crea sesiones complejas con múltiples Competencias (NO incluye TUTORÍA).', url: 'https://academic-works-443822-r8.web.app/', icon: 'library-big', category: 'Planificación' },
-        { title: 'Generador de Unidades V-2.0', description: 'Diseña unidades de aprendizaje listas para implementar.', url: 'https://unidades2.netlify.app/', icon: 'layers-3', category: 'Planificación' },
-        { title: 'Programación Anual', description: 'Genera tu programación curricular anual de forma sencilla.', url: 'https://unrivaled-unicorn-fe7373.netlify.app/', icon: 'calendar-days', category: 'Planificación' },
-        { title: 'Fichas y Exámenes', description: 'Genera material de trabajo y evaluaciones al instante.', url: 'https://jazzy-moxie-e34a66.netlify.app/', icon: 'file-spreadsheet', category: 'Recursos' },
-        { title: 'Registros Auxiliares', description: 'Gestiona y crea registros de notas de forma automática.', url: 'https://stalwart-buttercream-8c9f0d.netlify.app/', icon: 'notebook-pen', category: 'Recursos' },
-        { title: 'Carpetas de Recuperación', description: 'Crea planes y materiales para el periodo de recuperación.', url: 'https://carpetasderecuperacion.netlify.app/', icon: 'folder-sync', category: 'Recursos' },
-        { title: 'Generador de Solicitudes', description: 'Redacta documentos administrativos de forma automática.', url: 'https://fancy-profiterole-01445b.netlify.app/', icon: 'file-signature', category: 'Gestión' },
-        { title: 'Solucionador de Conflictos', description: 'Guía para actuar en situaciones de conflicto según normativas.', url: 'https://elegant-duckanoo-d702fe.netlify.app/', icon: 'shield-check', category: 'Gestión' },
-        { title: 'Proyectos Integrados', description: 'Desarrolla proyectos basados en problemas reales.', url: 'https://jocular-concha-e30cbd.netlify.app/', icon: 'puzzle', category: 'Gestión' },
-    ];
-    const categories = ['Todos', ...new Set(generators.map(g => g.category))];
-    const categoryColors = { 'Planificación': 'blue', 'Recursos': 'green', 'Gestión': 'purple' };
+    // --- SCRIPT GUARDIÁN CON LOGS ---
+    (function() {
+        console.log("🟡 PASO 3: Ejecutando script guardián...");
+        const params = new URLSearchParams(window.location.search);
+        const token = params.get('token');
 
-    // --- FUNCIÓN PARA ACTUALIZAR LA INTERFAZ ---
-    function updateUI(user) {
-        if (user) {
-            // SI HAY USUARIO: Muestra contenido y botón de salir.
-            toolsSubtitle.textContent = `Bienvenido/a. Selecciona una herramienta para empezar.`;
-            const logoutButtonHTML = `<button class="auth-button border-red-500 text-red-500 hover:bg-red-500 hover:text-white js-logout-button">Cerrar Sesión</button>`;
-            authButtonsContainer.innerHTML = logoutButtonHTML;
+        if (token) {
+            console.log("  - Token encontrado en la URL. Longitud:", token.length);
+            console.log("  - Intentando autenticar con signInWithCustomToken...");
 
-            document.querySelector('.js-logout-button').addEventListener('click', async () => {
-                if (logoutToast) logoutToast.classList.remove('hidden');
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                await signOut(auth); // Cierra sesión en Firebase.
-                window.location.href = 'https://elprofecaicedo.com'; // Redirige al portal.
-            });
-
-            renderFilters();
-            renderGenerators('Todos'); // <-- AQUÍ SE MUESTRAN LAS TARJETAS
+            signInWithCustomToken(auth, token)
+                .then((userCredential) => {
+                    console.log("✅ ÉXITO: signInWithCustomToken completado. UID:", userCredential.user.uid);
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({ path: newUrl }, '', newUrl);
+                })
+                .catch((error) => {
+                    console.error("🔴 FALLO CRÍTICO: signInWithCustomToken ha fallado.");
+                    console.error("  - Código de Error:", error.code);
+                    console.error("  - Mensaje de Error:", error.message);
+                    console.error("  - Objeto de error completo:", error);
+                });
         } else {
-            // SI NO HAY USUARIO: Muestra mensaje y redirige.
-            toolsSubtitle.textContent = 'Inicia sesión para acceder a un ecosistema de soluciones a tu medida.';
-            generatorGridContainer.innerHTML = `<p class="text-center col-span-3 text-gray-500 mt-8">Inicia sesión desde el portal principal para ver las herramientas.</p>`;
+            console.log("  - No se encontró token en la URL.");
         }
-    }
-    
-    // --- FUNCIONES PARA RENDERIZAR FILTROS Y TARJETAS ---
-    function renderFilters() {
-        categoryFiltersContainer.innerHTML = '';
-        categories.forEach(category => {
-            const button = document.createElement('button');
-            button.className = 'filter-button'; // Asegúrate de tener estilos para esta clase
-            button.textContent = category;
-            if (category === 'Todos') button.classList.add('active'); // Clase para el filtro activo
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                renderGenerators(category);
-            });
-            categoryFiltersContainer.appendChild(button);
-        });
-    }
+    })();
 
-    function renderGenerators(filter) {
-        generatorGridContainer.innerHTML = '';
-        const grid = document.createElement('div');
-        grid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-6';
-        const filteredGenerators = filter === 'Todos' ? generators : generators.filter(g => g.category === filter);
-        
-        filteredGenerators.forEach(gen => {
-            const color = categoryColors[gen.category] || 'gray';
-            const card = document.createElement('div');
-            // Usando las clases de tu script original para mantener el estilo
-            card.className = 'generator-card';
-            card.innerHTML = `
-                <div class="generator-card-header">
-                    <div class="generator-icon bg-${color}-100 text-${color}-600">
-                        <i data-lucide="${gen.icon}"></i>
-                    </div>
-                    <div>
-                        <h3 class="generator-title">${gen.title}</h3>
-                        <p class="generator-description">${gen.description}</p>
-                    </div>
-                </div>
-                <div class="generator-card-footer">
-                    <span>Abrir Herramienta &rarr;</span>
-                </div>
-            `;
-            card.addEventListener('click', () => openGenerator(gen.url));
-            grid.appendChild(card);
-        });
-        generatorGridContainer.appendChild(grid);
-        // Si usas la librería de íconos Lucide, necesitas llamarla para que se rendericen.
-        if (window.lucide) {
-            lucide.createIcons();
-        }
-    }
-
-    function openGenerator(url) {
-        generatorIframe.src = url;
-        generatorModal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    closeGeneratorBtn.addEventListener('click', () => {
-        generatorModal.classList.add('hidden');
-        generatorIframe.src = 'about:blank';
-        document.body.style.overflow = 'auto';
-    });
-
-    // ====================================================================================
-    // PASO 5: LISTENER PRINCIPAL DEL ESTADO DE AUTENTICACIÓN
-    // Es el "corazón" que reacciona a los cambios de sesión.
-    // ====================================================================================
+    // --- LISTENER DE ESTADO DE AUTENTICACIÓN CON LOGS ---
+    console.log("🔵 PASO 4: Configurando listener onAuthStateChanged...");
     onAuthStateChanged(auth, user => {
-        updateUI(user); // Llama a la función que actualiza la interfaz.
-        if (!user && !window.location.search.includes('token')) {
-            // Redirección final de seguridad si no hay usuario ni token en proceso.
-            console.log("🚫 No hay sesión. Redirigiendo al login principal.");
-            setTimeout(() => {
-                window.location.href = 'https://elprofecaicedo.com';
-            }, 1500); // Pequeño delay para que el usuario vea el mensaje.
+        console.log("🔄 Evento onAuthStateChanged detectado.");
+        if (user) {
+            console.log("  - ✅ ESTADO: Usuario autenticado. UID:", user.uid);
+        } else {
+            console.log("  - ❌ ESTADO: No hay usuario.");
         }
     });
 
-}); // Fin de DOMContentLoaded
+} catch (e) {
+    console.error("🔴 ERROR FATAL: No se pudo inicializar Firebase. Comprueba la configuración.", e);
+}
+
+console.log("--- FIN DE DEPURACIÓN ---");
+
+// El resto de tu código de UI (updateUI, etc.) iría aquí.
+// Por ahora, está comentado para enfocarnos solo en la autenticación.
