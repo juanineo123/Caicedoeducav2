@@ -9,11 +9,13 @@ import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "htt
 // PASO 2: CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
 // Tus credenciales para conectar este sitio con tu proyecto de Firebase.
 // ====================================================================================
+// Pega este bloque en el script de caicedoeduca.com
+
 const firebaseConfig = {
     apiKey: "AIzaSyD_SCyO4s-fZZS2qBTKEqAFiWP3IPD97Uo",
     authDomain: "plataforma-escala.firebaseapp.com",
     projectId: "plataforma-escala",
-    storageBucket: "plataforma-escala.appspot.com",
+    storageBucket: "plataforma-escala.appspot.com", // Es mejor usar .appspot.com
     messagingSenderId: "917193676993",
     appId: "1:917193676993:web:da3a51e59246bd917c1c40"
 };
