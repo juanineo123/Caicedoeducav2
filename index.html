@@ -26,9 +26,6 @@
                 <a href="#pilares" class="nav-link">Nuestros Pilares</a>
                 <a href="#herramientas" class="nav-link">Generdores</a>
                 <a href="#acerca-de" class="nav-link">Sobre el Creador</a>
-                <a href="https://elprofecaicedo.com/dashboard.html" class="btn-volver">
-                    &#8592; Volver al Inicio
-                </a>
             </div>
             <div id="auth-buttons-container" class="hidden lg:block hidden">
             </div>
@@ -45,7 +42,6 @@
         <a href="#pilares" class="mobile-nav-link">Nuestros Pilares</a>
         <a href="#herramientas" class="mobile-nav-link">Generadores</a>
         <a href="#acerca-de" class="mobile-nav-link">Sobre el Creador</a>
-        <a href="https://elprofecaicedo.com/dashboard.html" class="mobile-nav-link">&#8592; Volver al Inicio</a>
 
         <div id="mobile-auth-buttons-container" class="pt-6">
         </div>
@@ -60,12 +56,10 @@
         <div class="absolute inset-0 bg-gray-900 opacity-60"></div>
         <div class="relative z-10 text-white animate-fade-in text-left">
             <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4">
-                Plataforma que <span class="text-cyan-400"><br>Potencia</span> tu<br> Vocación
+                La Plataforma que <span class="text-cyan-400"><br>Potencia</span> tu<br> Vocación
             </h1>
             <p class="max-w-2xl text-lg md:text-xl text-gray-300 mb-8">
-                ✔️Genera: Sesiones de Aprendizaje, Evaluaciones, Fichas, Programaciones anuales, Proyectos unificados,
-                Unidades de aprendizaje y más.
-                <br>✔️Dedica tu energía y tiempo a tu pasión de enseñar y menos a planificar
+                Dedica tu energía y tiempo a tu pasión de enseñar y menos a planificar
                 <br>✔️​100% basados en el Currículo Nacional Peruano.
             </p>
             <a href="#herramientas" class="cta-button">
@@ -110,34 +104,6 @@
             <div id="generator-grid-container" class="mt-12"></div>
         </div>
     </section>
-
-    <section id="seguridad" class="py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-
-            <h2 class="section-title text-3xl">🚨Tu Seguridad es Nuestra Prioridad🚨</h2>
-            <p class="section-subtitle">
-                Todas nuestras herramientas son analizadas constantemente para garantizar que están 100% libres de
-                "virus
-                y malware". Tu tranquilidad es fundamental para nosotros.
-            </p>
-
-            <div class="mt-12 flex justify-center items-center gap-12 md:gap-16">
-
-                <div class="text-center">
-                    <img src="imagen/panda-logo.png" alt="Logo de Panda Security"
-                        class="h-36 w-auto mx-auto transition-all duration-300">
-                    <p class="text-xs text-gray-500 mt-2 font-semibold">Verificado con Panda Premium</p>
-                </div>
-
-                <div class="text-center">
-                    <img src="imagen/malwarebytes-logo.png" alt="Logo de Malwarebytes"
-                        class="h-36 w-auto mx-auto transition-all duration-300">
-                    <p class="text-xs text-gray-500 mt-2 font-semibold">Verificado con Malwarebytes</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section id="acerca-de" class="py-20 px-4">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
             <div class="about-image-container">
@@ -224,10 +190,45 @@
         </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script src="script.js"></script>
 
 
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signOut,
+            GoogleAuthProvider,
+            FacebookAuthProvider,
+            signInWithPopup,    // <--- AÑADIDO AQUÍ
+            signInWithRedirect,
+            getRedirectResult
+        } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js';
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-Og-9Ju4aWSbmwa6b4OpoHzjPzd073VI",
+            authDomain: "auth.caicedoeduca.com",
+            projectId: "delta-cortex-437020-h5",
+            storageBucket: "delta-cortex-437020-h5.appspot.com",
+            messagingSenderId: "423600255022",
+            appId: "1:423600255022:web:210337d8730803c500afbf"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.firebaseAuth = {
+            auth,
+            onAuthStateChanged,
+            signOut,
+            GoogleAuthProvider,
+            FacebookAuthProvider,
+            signInWithPopup,    // <--- Y AÑADIDO AQUÍ
+            signInWithRedirect,
+            getRedirectResult
+        };
+    </script>
     <script>
         lucide.createIcons();
     </script>

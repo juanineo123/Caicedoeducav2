@@ -394,17 +394,3 @@ body {
 .animate-fade-in {
     animation: fade-in 1s ease-out forwards;
 }
-.btn-volver {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #e9ecef; /* Un color gris claro */
-    color: #495057;
-    text-decoration: none;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-volver:hover {
-    background-color: #dee2e6; /* Un gris un poco más oscuro al pasar el mouse */
-}
