@@ -1,18 +1,64 @@
+// ====================================================================================
+// PASO 1: IMPORTACIONES DE FIREBASE (SINTAXIS MODERNA)
+// Se importan TODAS las funciones necesarias de Firebase v9 desde el inicio.
+// ====================================================================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+// Añade esta nueva línea para las herramientas de la base de datos
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+// ====================================================================================
+// PASO 2: CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
+// Tus credenciales para conectar este sitio con tu proyecto de Firebase.
+// ====================================================================================
+// Pega este bloque en el script de caicedoeduca.com
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD_SCyO4s-fZZS2qBTKEqAFiWP3IPD97Uo",
+    authDomain: "plataforma-escala.firebaseapp.com",
+    projectId: "plataforma-escala",
+    storageBucket: "plataforma-escala.firebasestorage.app",
+    messagingSenderId: "917193676993",
+    appId: "1:917193676993:web:da3a51e59246bd917c1c40"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+// ====================================================================================
+// PASO 3: SCRIPT "GUARDIÁN" DE AUTENTICACIÓN 🔑
+// Se ejecuta de inmediato para proteger la página antes de que se muestre nada.
+// ====================================================================================
+(function () {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+
+    if (token) {
+        // Si hay token en la URL, intenta iniciar sesión con él.
+        signInWithCustomToken(auth, token)
+            .then(() => {
+                console.log("✅ Autenticación con token personalizado exitosa.");
+                // Limpia la URL para que el token no quede visible.
+                const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({ path: newUrl }, '', newUrl);
+            })
+            .catch((error) => {
+                // Si el token es inválido, redirige al portal principal.
+                console.error("❌ Error al autenticar con token:", error);
+                window.location.href = 'https://elprofecaicedo.com';
+            });
+    }
+    // Si no hay token, onAuthStateChanged se encargará de redirigir.
+})();
+
+// ====================================================================================
+// PASO 4: LÓGICA PRINCIPAL DE LA APLICACIÓN
+// Se ejecuta una vez que el DOM está cargado.
+// ====================================================================================
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ===== ELEMENTOS DEL DOM =====
-    const navbar = document.getElementById('navbar');
-    const authButtonsContainer = document.getElementById('auth-buttons-container');
-    const mobileAuthButtonsContainer = document.getElementById('mobile-auth-buttons-container');
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const closeMobileMenuBtn = document.getElementById('close-mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const loginModal = document.getElementById('login-modal');
-    const closeLoginModalBtn = document.getElementById('close-login-modal-btn');
-    const googleLoginBtn = document.getElementById('google-login-btn');
-    const facebookLoginBtn = document.getElementById('facebook-login-btn');
-    const loginError = document.getElementById('login-error');
+    // --- REFERENCIAS A ELEMENTOS DEL DOM ---
     const toolsSubtitle = document.getElementById('tools-subtitle');
+    const authButtonsContainer = document.getElementById('auth-buttons-container');
     const categoryFiltersContainer = document.getElementById('category-filters');
     const generatorGridContainer = document.getElementById('generator-grid-container');
     const generatorModal = document.getElementById('generator-modal');
@@ -20,10 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const generatorIframe = document.getElementById('generator-iframe');
     const logoutToast = document.getElementById('logout-toast');
 
-    // ===== DATOS DE LOS GENERADORES CON CATEGORÍAS =====
+    // --- DATOS DE LOS GENERADORES ---
     const generators = [
-        { title: 'Generador de Sesiones V-2.0', description: 'Crea tu sesión eligiendo una sola Competencia.', url: 'https://glistening-starlight-1588bf.netlify.app/', icon: 'book-open-check', category: 'Planificación' },
-        { title: 'Generador de Sesiones V-3.0', description: 'Crea sesiones complejas con múltiples Competencias.', url: 'https://academic-works-443822-r8.web.app/', icon: 'library-big', category: 'Planificación' },
+        { title: 'Generador de Sesiones V-2.0', description: 'Crea tu sesión eligiendo una sola Competencia (incluye TUTORÍA).', url: 'https://glistening-starlight-1588bf.netlify.app/', icon: 'book-open-check', category: 'Planificación' },
+        { title: 'Generador de Sesiones V-3.0', description: 'Crea sesiones complejas con múltiples Competencias (NO incluye TUTORÍA).', url: 'https://academic-works-443822-r8.web.app/', icon: 'library-big', category: 'Planificación' },
         { title: 'Generador de Unidades V-2.0', description: 'Diseña unidades de aprendizaje listas para implementar.', url: 'https://unidades2.netlify.app/', icon: 'layers-3', category: 'Planificación' },
         { title: 'Programación Anual', description: 'Genera tu programación curricular anual de forma sencilla.', url: 'https://unrivaled-unicorn-fe7373.netlify.app/', icon: 'calendar-days', category: 'Planificación' },
         { title: 'Fichas y Exámenes', description: 'Genera material de trabajo y evaluaciones al instante.', url: 'https://jazzy-moxie-e34a66.netlify.app/', icon: 'file-spreadsheet', category: 'Recursos' },
@@ -34,69 +80,40 @@ document.addEventListener('DOMContentLoaded', () => {
         { title: 'Proyectos Integrados', description: 'Desarrolla proyectos basados en problemas reales.', url: 'https://jocular-concha-e30cbd.netlify.app/', icon: 'puzzle', category: 'Gestión' },
     ];
     const categories = ['Todos', ...new Set(generators.map(g => g.category))];
-    const categoryColors = {
-        'Planificación': 'blue',
-        'Recursos': 'green',
-        'Gestión': 'purple'
-    };
+    const categoryColors = { 'Planificación': 'blue', 'Recursos': 'green', 'Gestión': 'purple' };
 
-    // ===== FUNCIONES =====
+    // --- FUNCIÓN PARA ACTUALIZAR LA INTERFAZ ---
     function updateUI(user) {
-        authButtonsContainer.innerHTML = '';
-        mobileAuthButtonsContainer.innerHTML = '';
         if (user) {
-            toolsSubtitle.textContent = `Bienvenido/a, ${user.displayName || 'docente'}. Selecciona una herramienta para empezar.`;
+            // SI HAY USUARIO: Muestra contenido y botón de salir.
+            toolsSubtitle.textContent = `Bienvenido/a. Selecciona una herramienta para empezar.`;
             const logoutButtonHTML = `<button class="auth-button border-red-500 text-red-500 hover:bg-red-500 hover:text-white js-logout-button">Cerrar Sesión</button>`;
             authButtonsContainer.innerHTML = logoutButtonHTML;
-            mobileAuthButtonsContainer.innerHTML = logoutButtonHTML;
-            document.querySelectorAll('.js-logout-button').forEach(button => {
-                button.addEventListener('click', async () => {
-                    // 1. Muestra el mensaje flotante
-                    if (logoutToast) {
-                        logoutToast.classList.remove('hidden');
-                    }
 
-                    // 2. Espera 1.5 segundos para que el mensaje sea visible
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-
-                    // 3. Cierra la sesión en Firebase
-                    try {
-                        await window.firebaseAuth.signOut(window.firebaseAuth.auth);
-                        // 4. Redirige a la página de inicio
-                        window.location.href = 'index.html';
-                    } catch (error) {
-                        console.error("Error al cerrar sesión:", error);
-                        // Oculta el mensaje si hay un error
-                        if (logoutToast) {
-                            logoutToast.classList.add('hidden');
-                        }
-                    }
-                });
+            document.querySelector('.js-logout-button').addEventListener('click', async () => {
+                if (logoutToast) logoutToast.classList.remove('hidden');
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                await signOut(auth); // Cierra sesión en Firebase.
+                window.location.href = 'https://elprofecaicedo.com'; // Redirige al portal.
             });
+
             renderFilters();
-            renderGenerators('Todos');
-            closeLoginModal();
+            renderGenerators('Todos'); // <-- AQUÍ SE MUESTRAN LAS TARJETAS
         } else {
+            // SI NO HAY USUARIO: Muestra mensaje y redirige.
             toolsSubtitle.textContent = 'Inicia sesión para acceder a un ecosistema de soluciones a tu medida.';
-            const loginButtonHTML = `<button class="auth-button js-login-button">Iniciar Sesión</button>`;
-            authButtonsContainer.innerHTML = loginButtonHTML;
-            mobileAuthButtonsContainer.innerHTML = loginButtonHTML;
-            document.querySelectorAll('.js-login-button').forEach(button => {
-                button.addEventListener('click', openLoginModal);
-            });
-            renderLockedGenerators();
+            generatorGridContainer.innerHTML = `<p class="text-center col-span-3 text-gray-500 mt-8">Inicia sesión desde el portal principal para ver las herramientas.</p>`;
         }
     }
 
+    // --- FUNCIONES PARA RENDERIZAR FILTROS Y TARJETAS ---
     function renderFilters() {
         categoryFiltersContainer.innerHTML = '';
         categories.forEach(category => {
             const button = document.createElement('button');
-            button.className = 'filter-button';
+            button.className = 'filter-button'; // Asegúrate de tener estilos para esta clase
             button.textContent = category;
-            if (category === 'Todos') {
-                button.classList.add('active');
-            }
+            if (category === 'Todos') button.classList.add('active'); // Clase para el filtro activo
             button.addEventListener('click', () => {
                 document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
@@ -111,9 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.createElement('div');
         grid.className = 'grid md:grid-cols-2 lg:grid-cols-3 gap-6';
         const filteredGenerators = filter === 'Todos' ? generators : generators.filter(g => g.category === filter);
+
         filteredGenerators.forEach(gen => {
             const color = categoryColors[gen.category] || 'gray';
             const card = document.createElement('div');
+            // Usando las clases de tu script original para mantener el estilo
             card.className = 'generator-card';
             card.innerHTML = `
                 <div class="generator-card-header">
@@ -129,111 +148,67 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span>Abrir Herramienta &rarr;</span>
                 </div>
             `;
-            card.addEventListener('click', () => openGenerator(gen.url + '?autorizado=true'));
+            card.addEventListener('click', () => openGenerator(gen.url));
             grid.appendChild(card);
         });
         generatorGridContainer.appendChild(grid);
-        lucide.createIcons();
-    }
-
-    function renderLockedGenerators() {
-        if (categoryFiltersContainer) {
-            categoryFiltersContainer.innerHTML = '';
-        }
-        if (generatorGridContainer) {
-            generatorGridContainer.innerHTML = `
-            <div class="mt-12 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center col-span-1 md:col-span-2 lg:col-span-3">
-                <i data-lucide="lock" class="mx-auto text-gray-400 h-12 w-12"></i>
-                <p class="mt-4 text-gray-600 font-semibold">El contenido está bloqueado.</p>
-                <p class="text-gray-500">Por favor, inicia sesión para ver las herramientas.</p>
-            </div>
-        `;
+        // Si usas la librería de íconos Lucide, necesitas llamarla para que se rendericen.
+        if (window.lucide) {
             lucide.createIcons();
         }
     }
 
-    function openLoginModal() {
-        loginModal.classList.remove('hidden');
-        setTimeout(() => loginModal.classList.add('visible'), 10);
-    }
-
-    function closeLoginModal() {
-        loginModal.classList.remove('visible');
-        setTimeout(() => loginModal.classList.add('hidden'), 300);
-    }
-
     function openGenerator(url) {
-        generatorIframe.src = url;
+        generatorIframe.src = url + '?autorizado=true';
         generatorModal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
 
-    function closeGenerator() {
+    closeGeneratorBtn.addEventListener('click', () => {
         generatorModal.classList.add('hidden');
         generatorIframe.src = 'about:blank';
         document.body.style.overflow = 'auto';
-    }
+    });
 
-    // ===== LÓGICA DE FIREBASE =====
-    const { auth, onAuthStateChanged, signOut, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } = window.firebaseAuth;
+    // ====================================================================================
+    // PASO 5: LISTENER PRINCIPAL DEL ESTADO DE AUTENTICACIÓN
+    // Es el "corazón" que reacciona a los cambios de sesión.
+    // ====================================================================================
     onAuthStateChanged(auth, user => {
-        updateUI(user);
-        if (authButtonsContainer && mobileAuthButtonsContainer) {
-            authButtonsContainer.classList.remove('hidden');
-            mobileAuthButtonsContainer.classList.remove('hidden');
-        }
-    });
+        updateUI(user); // Llama a la función que actualiza la interfaz.
+        onAuthStateChanged(auth, user => {
+            updateUI(user); // Llama a la función que actualiza la interfaz.
 
-    getRedirectResult(auth)
-        .then((result) => {
-            if (result) {
-                console.log('Inicio de sesión por redirección exitoso:', result.user);
+            // --- INICIO: AÑADIR EL ESCUCHA DE CIERRE DE SESIÓN GLOBAL ---
+            if (user) {
+                const db = getFirestore(app); // Obtiene la instancia de la base de datos
+                const userRef = doc(db, "users", user.uid); // Apunta al documento de membresía del usuario
+
+                // onSnapshot crea una conexión en tiempo real
+                onSnapshot(userRef, (docSnapshot) => {
+                    if (docSnapshot.exists()) {
+                        const userData = docSnapshot.data();
+                        // Si el campo 'sessionValidUntil' existe, significa que se activó el cierre global
+                        if (userData.sessionValidUntil) {
+                            console.log("Señal de cierre de sesión global recibida. Cerrando sesión localmente.");
+                            signOut(auth); // Cierra la sesión en esta página
+                        }
+                    }
+                });
             }
-        }).catch((error) => {
-            console.error('Error en el resultado de la redirección:', error);
-            loginError.textContent = 'Hubo un error al completar el inicio de sesión.';
-            loginError.classList.remove('hidden');
+            // --- FIN: AÑADIR EL ESCUCHA DE CIERRE DE SESIÓN GLOBAL ---
+
+            if (!user && !window.location.search.includes('token')) {
+                // ... (el resto de tu código se queda igual)
+            }
         });
-
-    // CÓDIGO CORREGIDO Y DEFINITIVO
-    googleLoginBtn.addEventListener('click', async () => {
-        loginError.classList.add('hidden');
-        try {
-            await signInWithPopup(auth, new GoogleAuthProvider());
-        } catch (error) {
-            console.error("Error con Google Pop-up:", error);
-            loginError.textContent = 'Error al iniciar con Google. Intenta de nuevo.';
-            loginError.classList.remove('hidden');
+        if (!user && !window.location.search.includes('token')) {
+            // Redirección final de seguridad si no hay usuario ni token en proceso.
+            console.log("🚫 No hay sesión. Redirigiendo al login principal.");
+            setTimeout(() => {
+                window.location.href = 'https://elprofecaicedo.com';
+            }, 1500); // Pequeño delay para que el usuario vea el mensaje.
         }
     });
 
-    // CÓDIGO CORREGIDO Y DEFINITIVO
-    facebookLoginBtn.addEventListener('click', async () => {
-        loginError.classList.add('hidden');
-        try {
-            await signInWithPopup(auth, new FacebookAuthProvider());
-        } catch (error) {
-            console.error("Error con Facebook Pop-up:", error);
-            loginError.textContent = 'Error al iniciar con Facebook. Intenta de nuevo.';
-            loginError.classList.remove('hidden');
-        }
-    });
-
-    // ===== EVENT LISTENERS ADICIONALES =====
-    closeLoginModalBtn.addEventListener('click', closeLoginModal);
-    closeGeneratorBtn.addEventListener('click', closeGenerator);
-
-    mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.remove('hidden'));
-    closeMobileMenuBtn.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-        link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-    });
-
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    });
-});
+}); // Fin de DOMContentLoaded
