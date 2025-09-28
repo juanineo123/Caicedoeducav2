@@ -175,39 +175,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Es el "corazón" que reacciona a los cambios de sesión.
     // ====================================================================================
     onAuthStateChanged(auth, user => {
-        updateUI(user); // Llama a la función que actualiza la interfaz.
-        onAuthStateChanged(auth, user => {
-            updateUI(user); // Llama a la función que actualiza la interfaz.
+        // 1. Llama a la función que actualiza la interfaz (botones, mensajes, etc.).
+        updateUI(user);
 
-            // --- INICIO: AÑADIR EL ESCUCHA DE CIERRE DE SESIÓN GLOBAL ---
-            if (user) {
-                const db = getFirestore(app); // Obtiene la instancia de la base de datos
-                const userRef = doc(db, "users", user.uid); // Apunta al documento de membresía del usuario
+        // 2. Comprueba si hay un usuario conectado.
+        if (user) {
+            // SI HAY USUARIO: Activa el "escucha" para el cierre de sesión global.
+            const db = getFirestore(app);
+            const userRef = doc(db, "users", user.uid);
 
-                // onSnapshot crea una conexión en tiempo real
-                onSnapshot(userRef, (docSnapshot) => {
-                    if (docSnapshot.exists()) {
-                        const userData = docSnapshot.data();
-                        // Si el campo 'sessionValidUntil' existe, significa que se activó el cierre global
-                        if (userData.sessionValidUntil) {
-                            console.log("Señal de cierre de sesión global recibida. Cerrando sesión localmente.");
-                            signOut(auth); // Cierra la sesión en esta página
-                        }
+            onSnapshot(userRef, (docSnapshot) => {
+                if (docSnapshot.exists()) {
+                    const userData = docSnapshot.data();
+                    if (userData.sessionValidUntil) {
+                        console.log("Señal de cierre de sesión global recibida. Cerrando sesión localmente.");
+                        signOut(auth);
                     }
-                });
-            }
-            // --- FIN: AÑADIR EL ESCUCHA DE CIERRE DE SESIÓN GLOBAL ---
+                }
+            });
 
-            if (!user && !window.location.search.includes('token')) {
-                // ... (el resto de tu código se queda igual)
+        } else {
+            // SI NO HAY USUARIO: Comprueba si debe redirigir.
+            if (!window.location.search.includes('token')) {
+                console.log("🚫 No hay sesión. Redirigiendo al login principal.");
+                setTimeout(() => {
+                    window.location.href = 'https://elprofecaicedo.com';
+                }, 1500);
             }
-        });
-        if (!user && !window.location.search.includes('token')) {
-            // Redirección final de seguridad si no hay usuario ni token en proceso.
-            console.log("🚫 No hay sesión. Redirigiendo al login principal.");
-            setTimeout(() => {
-                window.location.href = 'https://elprofecaicedo.com';
-            }, 1500); // Pequeño delay para que el usuario vea el mensaje.
         }
     });
 
