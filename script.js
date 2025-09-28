@@ -203,19 +203,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user) {
             // SI HAY USUARIO: Activa el "escucha" para el cierre de sesión global.
             const db = getFirestore(app);
-            const userRef = doc(db, "users", user.uid);
+            let isLoggingOut = false; // AGREGAR ESTA LÍNEA AL INICIO
 
+            const userRef = doc(db, "users", user.uid);
             onSnapshot(userRef, (docSnapshot) => {
                 console.log("3. Receptor: onSnapshot se ejecutó. Verificando datos...");
                 if (docSnapshot.exists()) {
                     const userData = docSnapshot.data();
-                    if (userData.sessionValidUntil) {
+                    if (userData.sessionValidUntil && !isLoggingOut) {
                         console.log("Señal de cierre de sesión global recibida. Cerrando sesión localmente.");
-                        signOut(auth);
+                        isLoggingOut = true;
+                        signOut(auth).then(() => {
+                            window.location.href = 'https://elprofecaicedo.com';
+                        });
                     }
                 }
             });
-
         } else {
             // SI NO HAY USUARIO: Comprueba si debe redirigir.
             if (!window.location.search.includes('token')) {
