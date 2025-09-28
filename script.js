@@ -4,7 +4,7 @@
 // ====================================================================================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 // ====================================================================================
 // PASO 2: CONFIGURACIÓN E INICIALIZACIÓN DE FIREBASE
@@ -22,7 +22,12 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
+// ====================================================================================
+// PASO 3: SCRIPT "GUARDIÁN" DE AUTENTICACIÓN 🔑
+// Se ejecuta de inmediato para proteger la página antes de que se muestre nada.
+// ====================================================================================
 // ====================================================================================
 // PASO 3: SCRIPT "GUARDIÁN" DE AUTENTICACIÓN 🔑
 // Se ejecuta de inmediato para proteger la página antes de que se muestre nada.
@@ -34,8 +39,25 @@ const auth = getAuth(app);
     if (token) {
         // Si hay token en la URL, intenta iniciar sesión con él.
         signInWithCustomToken(auth, token)
-            .then(() => {
+            .then(async (userCredential) => { // <--- Hacemos la función async
                 console.log("✅ Autenticación con token personalizado exitosa.");
+
+                // ▼▼▼ INICIA CÓDIGO AÑADIDO ▼▼▼
+                // Borra la marca de cierre de sesión anterior para evitar bucles.
+                const user = userCredential.user;
+                if (user) {
+                    const userRef = doc(db, "users", user.uid);
+                    try {
+                        await updateDoc(userRef, {
+                            sessionValidUntil: deleteField()
+                        });
+                        console.log("🧼 Marca de cierre de sesión anterior eliminada.");
+                    } catch (error) {
+                        console.error("⚠️ Error al limpiar la marca de sesión:", error);
+                    }
+                }
+                // ▲▲▲ FIN CÓDIGO AÑADIDO ▲▲▲
+
                 // Limpia la URL para que el token no quede visible.
                 const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
                 window.history.replaceState({ path: newUrl }, '', newUrl);
