@@ -206,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const userRef = doc(db, "users", user.uid);
 
             onSnapshot(userRef, (docSnapshot) => {
+                console.log("3. Receptor: onSnapshot se ejecutó. Verificando datos...");
                 if (docSnapshot.exists()) {
                     const userData = docSnapshot.data();
                     if (userData.sessionValidUntil) {
